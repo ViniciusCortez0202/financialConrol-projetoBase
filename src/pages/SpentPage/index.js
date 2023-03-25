@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 import { styles } from './style';
 import { FlatList } from 'react-native';
 import SpentInput from '../../components/SpentInput';
@@ -54,7 +54,7 @@ export default function SpentPage() {
                     setUpdateSpents(false);
                 }} />
             </View>
-            <View style={styles.list}>
+            <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={-100} style={styles.list}>
                 {
                     updateSpents ? <ActivityIndicator size={'large'} />
                         : <FlatList
@@ -64,7 +64,7 @@ export default function SpentPage() {
                             ItemSeparatorComponent={<View style={{height: 10}}/>}
                         />
                 }
-            </View>
+            </KeyboardAvoidingView>
         </View>
     );
 }
