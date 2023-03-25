@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 15,
         backgroundColor: '#e3e3e3',
-        elevation: 4
+        elevation: 4,
     },
     spentName: {
         fontSize: 20,
