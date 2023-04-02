@@ -5,11 +5,14 @@ import SpentInput from './src/components/SpentInput';
 import { object, string, number, decimal, InferType } from 'yup';
 import AddSpentButton from './src/components/AddSpentButton';
 import SpentPage from './src/pages/SpentPage';
+import Dashboard from './src/components/Dashboard';
 
 
 export default function App() {
   return (
-   <SpentPage/>
+    // <View style={styles.container}>
+    <Dashboard/>
+  //  </View>
   );
 }
 

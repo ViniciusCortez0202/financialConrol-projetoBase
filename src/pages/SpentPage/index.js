@@ -54,7 +54,7 @@ export default function SpentPage() {
                     setUpdateSpents(false);
                 }} />
             </View>
-            <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={-100} style={styles.list}>
+            <KeyboardAvoidingView behavior="height" style={styles.list}>
                 {
                     updateSpents ? <ActivityIndicator size={'large'} />
                         : <FlatList
