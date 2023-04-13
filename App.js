@@ -1,26 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import SpentCard from './src/components/SpentCard';
-import SpentInput from './src/components/SpentInput';
-import { object, string, number, decimal, InferType } from 'yup';
-import AddSpentButton from './src/components/AddSpentButton';
-import SpentPage from './src/pages/SpentPage';
-import Dashboard from './src/components/Dashboard';
-
+import { NavigationContainer } from '@react-navigation/native';
+import StackRoute from './src/routes/Stacks';
 
 export default function App() {
   return (
-    // <View style={styles.container}>
-    <Dashboard/>
-  //  </View>
+    <NavigationContainer>
+      <StackRoute/>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

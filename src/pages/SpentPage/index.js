@@ -1,70 +1,80 @@
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
-import { styles } from './style';
-import { FlatList } from 'react-native';
+import { FlatList, KeyboardAvoidingView, View, ToastAndroid } from 'react-native';
 import SpentInput from '../../components/SpentInput';
-import AddSpentButton from '../../components/AddSpentButton';
+import SpentButton from '../../components/SpentButton';
 import SpentCard from '../../components/SpentCard';
-import { object, string, number, decimal, InferType } from 'yup';
-import { ActivityIndicator } from 'react-native';
+import { object, string, number } from 'yup';
+
+import { styles } from './style';
 
 
-export default function SpentPage() {
+export default function SpentPage({route}) {
+    React.useEffect(() => {
+        const id = route.params?.id;
+        console.log("aqui esta o id: " + id);
+    })
 
-    const [updateSpents, setUpdateSpents] = useState(false);
-    let spentName = "";
-    let spentValue = 0;
+    const schema = object({
+        spentName: string()
+        .required("O nome do gasto não pode ser vazio."),
+        spentValue: number()
+        .required("O valor do gasto não pode ser vazio.")
+        .positive("O valor do gasto deve ser um número positivo.")
+    })
 
-    const [data, setData] = useState([
-        {
-            id: 0,
+    const [data, setData] = useState(
+        [
+            {
+            id: 1,
             spentName: "Aluguel",
-            spentValue: 500.00
-        }
-    ])
+            spentValue: 500
+            },
+        ]
+    )
+    let spentName;
+    let spentValue;
 
-    let schema = object().shape(
-        {
-            spentName: string()
-                .required("É necessario adicionar um nome para adicionar um gasto."),
-            spentValue: number("O valor do gasto precisa ser um número.")
-                .required("É necessario adicionar um valor para adicionar um gasto.")
-                .positive("Só é permitido adicionar valoes positivos.")
-        })
-    return (
-        <View style={styles.container}>
-            <View style={styles.content}>
-                <SpentInput placeholder="Nome do gasto" onChangeText={(value) => { spentName = value }} />
+    
+ return (
+   <View style={styles.container}>
+        <View style={styles.content}>
 
-                <SpentInput placeholder="Valor do gasto" keyboardType="decimal-pad"
-                    onChangeText={(value) => { spentValue = value }} />
+            <SpentInput placeholder={"Digite o nome do gasto"} 
+            onChangeText={(value) => {spentName = value}} />
+            <SpentInput placeholder={"Digite o valor do gasto"} 
+            keyBoardType={"number-pad"}
+            onChangeText={(value) => {
+                spentValue=value;
+            }}/>
 
-                <AddSpentButton title="Adicionar" onPress={async () => {
+            <SpentButton title={"Adicionar"} onPress={async () => {                            
 
-                    setUpdateSpents(true);
-                    const newSpent = { spentName: spentName, spentValue: spentValue };
-                    const validator = await schema.isValid({ spentName: spentName, spentValue: spentValue });
-                    console.log(validator)
-                    if (validator) {
-                        newSpent.id = data.length;
-                        setData([...data, newSpent]);
-                    } else {
-                        console.log("error")
-                    }
-                    setUpdateSpents(false);
-                }} />
-            </View>
-            <KeyboardAvoidingView behavior="height" style={styles.list}>
-                {
-                    updateSpents ? <ActivityIndicator size={'large'} />
-                        : <FlatList
-                            data={data}
-                            renderItem={({ item }) => <SpentCard spentName={item.spentName} spentValue={item.spentValue} />}
-                            keyExtractor={(item) => item.id}
-                            ItemSeparatorComponent={<View style={{height: 10}}/>}
-                        />
+                const newSpent = {                    
+                    spentName: spentName,
+                    spentValue: spentValue
                 }
-            </KeyboardAvoidingView>
+                
+                try{
+                    await schema.validate(newSpent);
+                    newSpent.id = data.length+1;
+                    setData([...data, newSpent]);  
+                } catch(error){
+                    ToastAndroid.show(error.errors[0], ToastAndroid.SHORT);
+                }            
+            }}/>
         </View>
-    );
+            <View style={styles.list}>
+                <KeyboardAvoidingView behavior='height'>
+                    <FlatList
+                        data={data}
+                        ItemSeparatorComponent={<View style={{height: 10}}/>}
+                        renderItem={({item}) => <SpentCard spentName={item.spentName} 
+                        spentValue={item.spentValue}
+                        keyExtractor={item => item.id}
+                        />}
+                    />
+                </KeyboardAvoidingView>
+            </View>
+   </View>
+  );
 }

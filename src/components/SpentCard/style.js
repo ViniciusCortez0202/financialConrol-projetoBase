@@ -1,14 +1,14 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-    spentCard: {
-        width: '100%',
-        borderRadius: 20,
+    card: {        
+        width: "100%",
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 15,
         backgroundColor: '#e3e3e3',
+        padding: 15,
+        borderRadius: 20,
         elevation: 4,
     },
     spentName: {
